@@ -67,7 +67,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
                           size_t *upload_data_size, void **con_cls);
 
 
-// void start_http_server();
+void start_http_server();
 
 int main(int argc, char *argv[])
 {
@@ -229,4 +229,26 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     aptr = 0;
 
     return ret;
+}
+
+// Function to start the HTTP server
+void start_http_server() {
+    struct MHD_Daemon *daemon;
+
+    // Initialize the HTTP server daemon
+    daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, PORT, NULL, NULL,
+                              &answer_to_connection, NULL, MHD_OPTION_END);
+    if (daemon == NULL) {
+        fprintf(stderr, "Failed to start the HTTP server\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("HTTP server started on port %d\n", PORT);
+
+    // Wait for a key press to stop the server
+    printf("Press any key to stop the server...\n");
+    (void)getc(stdin);
+
+    // Stop the HTTP server daemon
+    MHD_stop_daemon(daemon);
 }
