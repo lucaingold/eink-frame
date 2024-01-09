@@ -305,69 +305,6 @@ UBYTE Dynamic_Refresh_Example(IT8951_Dev_Info Dev_Info, UDOUBLE Init_Target_Memo
     return 0;
 }
 
-static UBYTE BMP_Test(UWORD Panel_Width, UWORD Panel_Height, UDOUBLE Init_Target_Memory_Addr, UBYTE BitsPerPixel, UBYTE Pic_Count)
-{
-    UWORD WIDTH;
-
-    if(Four_Byte_Align == true){
-        WIDTH  = Panel_Width - (Panel_Width % 32);
-    }else{
-        WIDTH = Panel_Width;
-    }
-    UWORD HEIGHT = Panel_Height;
-
-    UDOUBLE Imagesize;
-
-    Imagesize = ((WIDTH * BitsPerPixel % 8 == 0)? (WIDTH * BitsPerPixel / 8 ): (WIDTH * BitsPerPixel / 8 + 1)) * HEIGHT;
-    if((Refresh_Frame_Buf = (UBYTE *)malloc(Imagesize)) == NULL) {
-        Debug("Failed to apply for black memory...\r\n");
-        return -1;
-    }
-
-    Paint_NewImage(Refresh_Frame_Buf, WIDTH, HEIGHT, 0, BLACK);
-    Paint_SelectImage(Refresh_Frame_Buf);
-	Epd_Mode(epd_mode);
-    Paint_SetBitsPerPixel(BitsPerPixel);
-    Paint_Clear(WHITE);
-
-
-	char Path[30];
-	sprintf(Path,"./pic/%dx%d_%d.bmp", WIDTH, HEIGHT, Pic_Count);
-	GUI_ReadBmp(Path, 0, 0);
-
-    switch(BitsPerPixel){
-        case BitsPerPixel_8:{
-            Paint_DrawString_EN(10, 10, "8 bits per pixel 16 grayscale", &Font24, 0xF0, 0x00);
-            EPD_IT8951_8bp_Refresh(Refresh_Frame_Buf, 0, 0, WIDTH,  HEIGHT, false, Init_Target_Memory_Addr);
-            break;
-        }
-        case BitsPerPixel_4:{
-			Paint_DrawString_EN(10, 10, "4 bits per pixel 16 grayscale", &Font24, 0xF0, 0x00);
-            EPD_IT8951_4bp_Refresh(Refresh_Frame_Buf, 0, 0, WIDTH,  HEIGHT, false, Init_Target_Memory_Addr,false);
-            break;
-        }
-        case BitsPerPixel_2:{
-            Paint_DrawString_EN(10, 10, "2 bits per pixel 4 grayscale", &Font24, 0xC0, 0x00);
-            EPD_IT8951_2bp_Refresh(Refresh_Frame_Buf, 0, 0, WIDTH,  HEIGHT, false, Init_Target_Memory_Addr,false);
-            break;
-        }
-        case BitsPerPixel_1:{
-            Paint_DrawString_EN(10, 10, "1 bit per pixel 2 grayscale", &Font24, 0x80, 0x00);
-            EPD_IT8951_1bp_Refresh(Refresh_Frame_Buf, 0, 0, WIDTH,  HEIGHT, A2_Mode, Init_Target_Memory_Addr,false);
-            break;
-        }
-    }
-
-    if(Refresh_Frame_Buf != NULL){
-        free(Refresh_Frame_Buf);
-        Refresh_Frame_Buf = NULL;
-    }
-
-    DEV_Delay_ms(5000);
-
-    return 0;
-}
-
 /******************************************************************************
 function: Display_ColorPalette_Example
 parameter:

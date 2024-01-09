@@ -67,7 +67,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
                           size_t *upload_data_size, void **con_cls);
 
 
-void start_http_server();
+// void start_http_server();
 
 int main(int argc, char *argv[])
 {
