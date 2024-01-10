@@ -6,5 +6,5 @@
 
 cd /
 cd /home/luca/code/eink-frame
-python -m SimpleHTTPServer &
+python3 -m SimpleHTTPServer &
 cd /
