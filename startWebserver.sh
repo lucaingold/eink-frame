@@ -7,4 +7,3 @@
 cd /
 cd /home/luca/code/eink-frame
 python3 -m SimpleHTTPServer &
-cd /
