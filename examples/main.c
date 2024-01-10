@@ -211,11 +211,11 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     if (strncmp(post_data, "path=", 5) == 0) {
         const char *path = post_data + 5;  // Skip "path="
         printf("Path is: %s\n", path);
-        EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, A2_Mode);
+        EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
         Display_BMP_WITH_PATH(Panel_Width, Panel_Height, Init_Target_Memory_Addr, BitsPerPixel_4, path);
     } else {
         // Handle invalid or missing path in the post_data
-        EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, A2_Mode);
+        EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
     }
 
     // Respond to the client
