@@ -1,5 +1,6 @@
 HTML-Server 80
 
+cd pic/html
 nohup python3 -m http.server 80 > /dev/null 2>&1 &
 
 Frame
