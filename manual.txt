@@ -37,3 +37,10 @@ WantedBy=default.target
 sudo systemctl daemon-reload
 sudo systemctl enable inkframe_startup.service
 sudo systemctl start inkframe_startup.service
+
+
+
+
+sudo apt-get install busybox
+pip3 install flask-cors
+pip3 install flask

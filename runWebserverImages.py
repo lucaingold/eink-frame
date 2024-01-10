@@ -1,11 +1,10 @@
-# webserver.py
-import http.server
-import socketserver
+from flask import Flask
+from flask_cors import CORS
 
-PORT = 80
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
-Handler = http.server.SimpleHTTPRequestHandler
+# Your existing routes and server setup here
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("Serving at port", PORT)
-    httpd.serve_forever()
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
