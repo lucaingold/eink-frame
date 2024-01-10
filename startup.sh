@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /home/luca/code/eink-frame
-/usr/bin/python3 -m http.server 80 > /dev/null &
+busybox httpd -p 80 -h . > /dev/null 2>&1 &
 /home/luca/code/eink-frame/epd -2.27 0 &
