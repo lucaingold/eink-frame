@@ -1,3 +1,4 @@
 #!/bin/bash
-/usr/bin/python3 -m http.server --directory /home/luca/code/eink-frame & 
+cd /home/luca/code/eink-frame
+/usr/bin/python3 runWebserverImages.py > /dev/null &
 /home/luca/code/eink-frame/epd -2.27 0 &
