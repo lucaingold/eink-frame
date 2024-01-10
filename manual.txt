@@ -1,27 +1,6 @@
 HTML-Server 80
 
-cd pic/html
-nohup python3 -m http.server 80 > /dev/null 2>&1 &
-
-
-#!/bin/sh
-#!launcher.sh
-#!navigate to home directory, then to here
-#!launch simple python server
-#!open chrome at localhost:8000
-
-cd /
-cd /home/luca/code/eink-frame
-python -m SimpleHTTPServer &
-cd /
-
-
-
-
-
-
-
-
+sudo nohup python3 runWebserverImages.py > /dev/null 2>&1 &
 
 
 Frame
@@ -33,3 +12,27 @@ sudo make -j4
 Add the VCOM value as a parameter and test the e-Paper, and this model is mode 0. 
 
 sudo ./epd -2.27 0
+
+
+sudo nohup python3 /home/luca/code/eink-frame/webserver.py > /dev/null 
+sudo /home/luca/code/eink-frame/epd -2.27 0 &
+
+1.
+ sudo nano /etc/systemd/system/inkframe_startup.service
+
+ 2.
+[Unit]
+Description=Ink Frame Startup
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/luca/code/eink-frame/startup.sh
+
+[Install]
+WantedBy=default.target
+
+3.
+sudo systemctl daemon-reload
+sudo systemctl enable inkframe_startup.service
+sudo systemctl start inkframe_startup.service
