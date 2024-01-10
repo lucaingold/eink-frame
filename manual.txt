@@ -1,0 +1,13 @@
+HTML-Server 80
+
+nohup python3 -m http.server 80 > /dev/null 2>&1 &
+
+Frame
+git clone https://github.com/waveshare/IT8951-ePaper.git
+cd IT8951-ePaper/Raspberry
+sudo make clean
+sudo make -j4
+
+Add the VCOM value as a parameter and test the e-Paper, and this model is mode 0. 
+
+sudo ./epd -2.27 0
