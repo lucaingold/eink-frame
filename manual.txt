@@ -19,6 +19,7 @@ sudo /home/luca/code/eink-frame/epd -2.27 0 &
 
 1.
  sudo nano /etc/systemd/system/inkframe_startup.service
+chmod +x /home/luca/code/eink-frame/startup.sh
 
  2.
 [Unit]
@@ -26,7 +27,7 @@ Description=Ink Frame Startup
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 ExecStart=/home/luca/code/eink-frame/startup.sh
 
 [Install]

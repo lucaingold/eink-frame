@@ -38,7 +38,7 @@ function generateMasonryGrid(columns, posts) {
 }
 
 function showImage(path) {
-      fetch('http://inkframe.local:8080/your-post-endpoint', {
+      fetch('http://inkframe.local:8080', {
         method: 'POST',
         headers: {
             'Content-Type': 'text/plain', 
