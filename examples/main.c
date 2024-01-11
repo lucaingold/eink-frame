@@ -219,7 +219,8 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     }
 
     EPD_IT8951_Sleep();
-    printf("Display is in sleep mode\n");
+    printf("Display is in sleep mode: %s\n", path);
+
 
     // Respond to the client
     const char *response = "<html><body>POST request with path received!</body></html>";
