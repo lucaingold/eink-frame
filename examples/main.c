@@ -69,7 +69,35 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
 
 void start_http_server();
 
-void  initScreen(){
+int main(int argc, char *argv[])
+{
+    //Exception handling:ctrl + c
+    signal(SIGINT, Handler);
+
+    if (argc < 2){
+        Debug("Please input VCOM value on FPC cable!\r\n");
+        Debug("Example: sudo ./epd -2.51\r\n");
+        exit(1);
+    }
+	if (argc != 3){
+		Debug("Please input e-Paper display mode!\r\n");
+		Debug("Example: sudo ./epd -2.27 0 or sudo ./epd -2.51 1\r\n");
+		Debug("Now, 10.3 inch glass panle is mode1, else is mode0\r\n");
+		Debug("If you don't know what to type in just type 0 \r\n");
+		exit(1);
+    }
+
+    //Init the BCM2835 Device
+    if(DEV_Module_Init()!=0){
+        return -1;
+    }
+
+    double temp;
+    sscanf(argv[1],"%lf",&temp);
+    VCOM = (UWORD)(fabs(temp)*1000);
+    Debug("VCOM value:%d\r\n", VCOM);
+	sscanf(argv[2],"%d",&epd_mode);
+    Debug("Display mode:%d\r\n", epd_mode);
     Dev_Info = EPD_IT8951_Init(VCOM);
 
     //get some important info from Dev_Info structure
@@ -102,37 +130,6 @@ void  initScreen(){
 
 	EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, INIT_Mode);
 
-}
-int main(int argc, char *argv[])
-{
-    //Exception handling:ctrl + c
-    signal(SIGINT, Handler);
-
-    if (argc < 2){
-        Debug("Please input VCOM value on FPC cable!\r\n");
-        Debug("Example: sudo ./epd -2.51\r\n");
-        exit(1);
-    }
-	if (argc != 3){
-		Debug("Please input e-Paper display mode!\r\n");
-		Debug("Example: sudo ./epd -2.27 0 or sudo ./epd -2.51 1\r\n");
-		Debug("Now, 10.3 inch glass panle is mode1, else is mode0\r\n");
-		Debug("If you don't know what to type in just type 0 \r\n");
-		exit(1);
-    }
-
-    //Init the BCM2835 Device
-    if(DEV_Module_Init()!=0){
-        return -1;
-    }
-
-    double temp;
-    sscanf(argv[1],"%lf",&temp);
-    VCOM = (UWORD)(fabs(temp)*1000);
-    Debug("VCOM value:%d\r\n", VCOM);
-	sscanf(argv[2],"%d",&epd_mode);
-    Debug("Display mode:%d\r\n", epd_mode);
-    
     start_http_server();  // Start the HTTP server
 
     // Exception handling: ctrl + c
@@ -175,6 +172,9 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+void  initScreen(){
+}
+
 // Function to handle POST requests with paths in the body
 int answer_to_connection(void *cls, struct MHD_Connection *connection,
                          const char *url, const char *method,
@@ -214,16 +214,12 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     if (strncmp(post_data, "path=", 5) == 0) {
         const char *path = post_data + 5;  // Skip "path="
         printf("Path is: %s\n", path);
-        initScreen();
         EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
         Display_BMP_WITH_PATH(Panel_Width, Panel_Height, Init_Target_Memory_Addr, BitsPerPixel_4, path);
     } else {
         // Handle invalid or missing path in the post_data
         EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
     }
-
-    EPD_IT8951_Sleep();
-    printf("Display is in sleep mode\n");
 
     // Respond to the client
     const char *response = "<html><body>POST request with path received!</body></html>";
@@ -236,6 +232,8 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     post_data = NULL;
     aptr = 0;
 
+    EPD_IT8951_Sleep();
+    printf("Display is in sleep mode\n");
 
 
     return ret;
