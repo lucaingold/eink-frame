@@ -70,6 +70,8 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
 void start_http_server();
 
 void  initScreen(){
+    Dev_Info = EPD_IT8951_Init(VCOM);
+
     //get some important info from Dev_Info structure
     Panel_Width = Dev_Info.Panel_W;
     Panel_Height = Dev_Info.Panel_H;
@@ -99,8 +101,8 @@ void  initScreen(){
     Debug("A2 Mode:%d\r\n", A2_Mode);
 
 	EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, INIT_Mode);
-}
 
+}
 int main(int argc, char *argv[])
 {
     //Exception handling:ctrl + c
@@ -119,20 +121,18 @@ int main(int argc, char *argv[])
 		exit(1);
     }
 
+    //Init the BCM2835 Device
+    if(DEV_Module_Init()!=0){
+        return -1;
+    }
+
     double temp;
     sscanf(argv[1],"%lf",&temp);
     VCOM = (UWORD)(fabs(temp)*1000);
     Debug("VCOM value:%d\r\n", VCOM);
 	sscanf(argv[2],"%d",&epd_mode);
     Debug("Display mode:%d\r\n", epd_mode);
-    Dev_Info = EPD_IT8951_Init(VCOM);
-
-    //Init the BCM2835 Device
-    if(DEV_Module_Init()!=0){
-        return -1;
-    }
-
-
+    
     start_http_server();  // Start the HTTP server
 
     // Exception handling: ctrl + c
