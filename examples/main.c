@@ -218,6 +218,9 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
         EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
     }
 
+    EPD_IT8951_Sleep();
+    printf("Display is in sleep mode\n");
+
     // Respond to the client
     const char *response = "<html><body>POST request with path received!</body></html>";
     struct MHD_Response *resp = MHD_create_response_from_buffer(strlen(response), (void *)response, MHD_RESPMEM_PERSISTENT);
@@ -229,8 +232,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     post_data = NULL;
     aptr = 0;
 
-    EPD_IT8951_Sleep();
-    printf("Display is in sleep mode");
+
 
     return ret;
 }
