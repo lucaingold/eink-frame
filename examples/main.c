@@ -172,9 +172,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void  initScreen(){
-}
-
 // Function to handle POST requests with paths in the body
 int answer_to_connection(void *cls, struct MHD_Connection *connection,
                          const char *url, const char *method,
@@ -214,6 +211,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     if (strncmp(post_data, "path=", 5) == 0) {
         const char *path = post_data + 5;  // Skip "path="
         printf("Path is: %s\n", path);
+        EPD_IT8951_SystemRun();
         EPD_IT8951_Clear_Refresh(Dev_Info, Init_Target_Memory_Addr, GC16_Mode);
         Display_BMP_WITH_PATH(Panel_Width, Panel_Height, Init_Target_Memory_Addr, BitsPerPixel_4, path);
     } else {
@@ -233,7 +231,8 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     aptr = 0;
 
     EPD_IT8951_Sleep();
-    printf("Display is in sleep mode\n");
+    
+    printf("Display is in sleep mode");
 
 
     return ret;
