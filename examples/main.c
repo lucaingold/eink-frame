@@ -230,6 +230,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     aptr = 0;
 
     EPD_IT8951_Sleep();
+    printf("Display is in sleep mode");
 
     return ret;
 }
