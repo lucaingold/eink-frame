@@ -229,6 +229,8 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
     post_data = NULL;
     aptr = 0;
 
+    EPD_IT8951_Sleep();
+
     return ret;
 }
 
